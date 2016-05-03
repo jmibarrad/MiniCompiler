@@ -1,9 +1,10 @@
 ﻿namespace Mini_Compiler.Lexer
 {
     public enum TokenTypes{
-        EOF
-            
-     }
+        EOF,
+        Id,
+        Number
+    }
 
     public class Token
     {
@@ -15,7 +16,6 @@
 
         public Token()
         {
-
         }
     }
 }

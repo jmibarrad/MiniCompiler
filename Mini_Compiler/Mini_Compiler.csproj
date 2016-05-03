@@ -48,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Lexer\Lexer.cs" />
+    <Compile Include="Lexer\LexicalException.cs" />
     <Compile Include="Lexer\StringContent.cs" />
     <Compile Include="Lexer\Symbol.cs" />
     <Compile Include="Lexer\Token.cs" />

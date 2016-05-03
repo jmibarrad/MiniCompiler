@@ -61,8 +61,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Lexer.feature</DependentUpon>
     </Compile>
-    <Compile Include="Steps\UnitTest1.cs" />
-    <Compile Include="UnitTest1.cs" />
+    <Compile Include="Steps\LexerSteps.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

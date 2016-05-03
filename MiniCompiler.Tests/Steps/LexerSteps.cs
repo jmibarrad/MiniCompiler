@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 
 using Mini_Compiler.Lexer;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace MiniCompiler.Tests.Steps
 {
@@ -40,7 +41,10 @@ namespace MiniCompiler.Tests.Steps
         {
             for (int i =0; i < table.RowCount; i++)
             {
-                table.Rows[i][]
+                Assert.AreEqual(table.Rows[i]["Type"] , tokenList[i].Type.ToString(), "The TokenTypes do not match.");
+                Assert.AreEqual(table.Rows[i]["Lexeme"], tokenList[i].Lexeme.ToString(), "The TokenTypes do not match.");
+                Assert.AreEqual(table.Rows[i]["Row"], tokenList[i].Row.ToString(), "The TokenTypes do not match.");
+                Assert.AreEqual(table.Rows[i]["Column"], tokenList[i].Column.ToString(), "The TokenTypes do not match.");
             }
         }
     }

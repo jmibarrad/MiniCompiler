@@ -278,6 +278,40 @@ this.ScenarioSetup(scenarioInfo);
 #line hidden
             this.ScenarioCleanup();
         }
+        
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("Input is an Addition operator")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "ReservedWords")]
+        public virtual void InputIsAnAdditionOperator()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Input is an Addition operator", ((string[])(null)));
+#line 56
+ this.ScenarioSetup(scenarioInfo);
+#line 57
+ testRunner.Given("I have an input of \'+\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line 58
+ testRunner.When("We Tokenize", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line hidden
+            TechTalk.SpecFlow.Table table7 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Type",
+                        "Lexeme",
+                        "Column",
+                        "Row"});
+            table7.AddRow(new string[] {
+                        "Sub",
+                        "+",
+                        "0",
+                        "0"});
+            table7.AddRow(new string[] {
+                        "EOF",
+                        "$",
+                        "1",
+                        "0"});
+#line 59
+ testRunner.Then("the result should be", ((string)(null)), table7, "Then ");
+#line hidden
+            this.ScenarioCleanup();
+        }
     }
 }
 #pragma warning restore

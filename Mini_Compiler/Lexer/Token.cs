@@ -3,7 +3,18 @@
     public enum TokenTypes{
         EOF,
         Id,
-        Number
+        Number,
+        Sum,
+        Mult,
+        Sub,
+        Equal,
+        Eos,
+        LeftParent,
+        Literal,
+        RightParent,
+        Div,
+        LeftBracket,
+        RightBracket
     }
 
     public class Token

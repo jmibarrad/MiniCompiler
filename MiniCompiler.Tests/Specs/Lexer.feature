@@ -52,3 +52,13 @@ Scenario: Input is an id a2042
 		| Type		| Lexeme   | Column | Row |
 		| Id		| a2042	   |   0    | 0   |
 		| EOF	    | $	       |   5    | 0   |
+
+ Scenario: Input is an Addition operator
+	Given I have an input of '+'
+	When We Tokenize
+	Then the result should be 
+		| Type		| Lexeme   | Column | Row |
+		| Sub		| + 	   |   0    | 0   |
+		| EOF	    | $	       |   1  | 0   |
+
+ 

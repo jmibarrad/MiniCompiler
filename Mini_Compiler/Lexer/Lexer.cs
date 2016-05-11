@@ -73,7 +73,7 @@ namespace Mini_Compiler.Lexer
                         }
                         else
                         {
-                            throw new LexicalException($"Symbol {currentSymbol.CurrentSymbol} not recognized at Row:{currentSymbol.Row} Col: {currentSymbol.Column}");
+                            throw new LexicalException("Symbol {currentSymbol.CurrentSymbol} not recognized at Row:{currentSymbol.Row} Col: {currentSymbol.Column}");
                         }
                         break;
                     case 1:

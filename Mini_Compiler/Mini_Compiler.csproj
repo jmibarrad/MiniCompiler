@@ -47,6 +47,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AddNode.cs" />
+    <Compile Include="BinaryOperatorNode.cs" />
+    <Compile Include="ExpressionNode.cs" />
     <Compile Include="Lexer\Lexer.cs" />
     <Compile Include="Lexer\LexicalException.cs" />
     <Compile Include="Lexer\StringContent.cs" />
@@ -55,10 +58,14 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SampleParser.cs" />
+    <Compile Include="SubNode.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Tree\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

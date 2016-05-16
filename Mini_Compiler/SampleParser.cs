@@ -19,7 +19,7 @@ namespace Mini_Compiler
             this.lexer = lexer;
         }
 
-        public float Parse()
+        public ExpressionNode Parse()
         {
              currentToken = lexer.GetNextToken();
             var eValue = E();
@@ -30,26 +30,30 @@ namespace Mini_Compiler
             return eValue;
         }
 
-        private float E()
+        private ExpressionNode E()
         {
             var tValue = T();
             return EP(tValue);
 
         }
 
-        private float EP(float param)
+        private ExpressionNode EP(ExpressionNode param)
         {
             if (currentToken.Type == TokenTypes.Sum)
             {
                 currentToken = lexer.GetNextToken();
                 var tValue = T();
-                return EP(param + tValue);
+                var node = new AddNode { LeftOperand = param, RightOperand = tValue };
+
+                return EP(node);
             }
             else if (currentToken.Type == TokenTypes.Sub)
             {
                 currentToken = lexer.GetNextToken();
                 var tValue = T();
-                return EP(param - tValue);
+                var node = new SubNode { LeftOperand = param, RightOperand = tValue };
+
+                return EP(node);
             }
             else
             {
@@ -57,25 +61,27 @@ namespace Mini_Compiler
             }
         }
 
-        private float T()
+        private ExpressionNode T()
         {
             var fValue = F();
             return TP(fValue);
         }
 
-        private float TP(float param)
+        private ExpressionNode TP(ExpressionNode param)
         {
             if (currentToken.Type == TokenTypes.Mult)
             {
                 currentToken = lexer.GetNextToken();
                 var fValue = F();
-                return TP(param * fValue);
+                var node = new MultNode {LeftOperand = param, RightOperand = fValue};
+                return TP(node);
             }
             else if (currentToken.Type == TokenTypes.Div)
             {
                 currentToken = lexer.GetNextToken();
                 var fValue = F();
-                return TP(param/fValue);
+                var node = new DivNode() { LeftOperand = param, RightOperand = fValue };
+                return TP(node);
             }
             else
             {
@@ -84,17 +90,17 @@ namespace Mini_Compiler
 
         }
 
-        private float F()
+        private ExpressionNode F()
         {
             if (currentToken.Type == TokenTypes.Number)
             {
                 var value = float.Parse(currentToken.Lexeme);
                 currentToken = lexer.GetNextToken();
-                return value;
+                return new NumberNode {Value = value};
             }else if (currentToken.Type == TokenTypes.Id)
             {
                 currentToken = lexer.GetNextToken();
-                return 0;
+                return new IdNode();
             }else if (currentToken.Type == TokenTypes.LeftParent)
             {
                 currentToken = lexer.GetNextToken();

@@ -11,7 +11,7 @@ namespace Mini_Compiler
     {
         static void Main(string[] args)
         {
-            SampleParser parser = new SampleParser(new Lexer.Lexer(new StringContent("(1+2)*3")));
+            SampleParser parser = new SampleParser(new Lexer.Lexer(new StringContent("1+2*3")));
             Console.Write(parser.Parse());
             Console.ReadKey();
             Console.WriteLine("");

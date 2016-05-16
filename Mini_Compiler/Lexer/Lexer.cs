@@ -85,6 +85,14 @@ namespace Mini_Compiler.Lexer
                         }
                         else
                         {
+                            if (lexeme.Equals("string"))
+                                return new Token() { Type = TokenTypes.String, Lexeme = lexeme, Column = tokenColumn, Row = tokenRow };
+                            else if (lexeme.Equals("int"))
+                                return new Token() { Type = TokenTypes.Int, Lexeme = lexeme, Column = tokenColumn, Row = tokenRow };
+                            else if (lexeme.Equals("print"))
+                                return new Token() { Type = TokenTypes.Print, Lexeme = lexeme, Column = tokenColumn, Row = tokenRow };
+                            else if (lexeme.Equals("read"))
+                                return new Token() { Type = TokenTypes.Read, Lexeme = lexeme, Column = tokenColumn, Row = tokenRow };
                             return new Token { Type = TokenTypes.Id, Lexeme = lexeme, Column = tokenColumn, Row = tokenRow };
                         }
                         break;

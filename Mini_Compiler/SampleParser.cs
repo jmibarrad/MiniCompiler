@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Runtime.InteropServices;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using Mini_Compiler.Lexer;
@@ -19,10 +21,94 @@ namespace Mini_Compiler
             this.lexer = lexer;
         }
 
-        public ExpressionNode Parse()
+        public SentenceNode SentenceList()
+        {
+            var sentence = Sentence();
+            if (currentToken.Type == TokenTypes.EOF)
+            {
+                return sentence;
+            }
+            sentence.NextSentence = SentenceList();
+            return sentence;
+        }
+
+        private SentenceNode Sentence()
+        {
+            if (currentToken.Type == TokenTypes.Int || currentToken.Type == TokenTypes.String)
+            {
+                var type = currentToken.Type;
+                currentToken = lexer.GetNextToken();
+               
+                if (currentToken.Type == TokenTypes.Id)
+                {
+                    string name = currentToken.Lexeme;
+
+                    currentToken = lexer.GetNextToken();
+
+                    if (currentToken.Type == TokenTypes.Eos)
+                    {
+                        currentToken = lexer.GetNextToken();
+                        return new DeclarationNode {Type = type, Value = name};
+                    }
+                }
+            }else if (currentToken.Type == TokenTypes.Read)
+            {
+           
+                currentToken = lexer.GetNextToken();
+
+                if (currentToken.Type == TokenTypes.Id)
+                {
+                    string name = currentToken.Lexeme;
+
+                    currentToken = lexer.GetNextToken();
+
+                    if (currentToken.Type == TokenTypes.Eos)
+                    {
+
+                        currentToken = lexer.GetNextToken();
+                        return new ReadNode() { Id = name };
+                    }
+                }
+
+            }
+            else if (currentToken.Type == TokenTypes.Print)
+            {
+               
+                currentToken = lexer.GetNextToken();
+
+                var exp = E();
+                    if (currentToken.Type == TokenTypes.Eos)
+                    {
+
+                    currentToken = lexer.GetNextToken();
+                    return new PrintNode { Expression = exp };
+                    }
+                
+            }
+            else if (currentToken.Type == TokenTypes.Id)
+            {
+                string name = currentToken.Lexeme;
+                currentToken = lexer.GetNextToken();
+                if (currentToken.Type == TokenTypes.Equal)
+                {
+                    currentToken = lexer.GetNextToken();
+                    var exp = E();
+
+                    if (currentToken.Type == TokenTypes.Eos)
+                    {
+                        currentToken = lexer.GetNextToken();
+                        return new AssignNode {Id = name, Expression = exp};
+                    }
+                }
+
+            }
+            throw new SyntaxErrorException();
+        }
+
+        public SentenceNode Parse()
         {
              currentToken = lexer.GetNextToken();
-            var eValue = E();
+            var eValue = SentenceList();
             if (currentToken.Type != TokenTypes.EOF)
             {
                 throw new SyntaxException("Se esperaba EOF");
@@ -99,8 +185,13 @@ namespace Mini_Compiler
                 return new NumberNode {Value = value};
             }else if (currentToken.Type == TokenTypes.Id)
             {
+                string id = currentToken.Lexeme;
                 currentToken = lexer.GetNextToken();
-                return new IdNode();
+                return new IdNode
+                {
+                    Value = id
+                        
+                };
             }else if (currentToken.Type == TokenTypes.LeftParent)
             {
                 currentToken = lexer.GetNextToken();

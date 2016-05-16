@@ -14,7 +14,11 @@
         RightParent,
         Div,
         LeftBracket,
-        RightBracket
+        RightBracket,
+        Read,
+        Print,
+        Int,
+        String
     }
 
     public class Token

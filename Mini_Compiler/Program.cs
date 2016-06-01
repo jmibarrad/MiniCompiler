@@ -11,8 +11,9 @@ namespace Mini_Compiler
     {
         static void Main(string[] args)
         {
-            SampleParser parser = new SampleParser(new Lexer.Lexer(new StringContent("int a; a= 1+2*2; print a+1;read b;")));
-            Console.Write(parser.Parse());
+            SampleParser parser = new SampleParser(new Lexer.Lexer(new StringContent("int a;string b; a= 1+2*b; print a+1;read a;")));
+            var tree = parser.Parse();
+            tree.ValidateSemantic();
             Console.ReadKey();
             Console.WriteLine("");
         }

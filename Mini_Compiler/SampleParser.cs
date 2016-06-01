@@ -113,6 +113,7 @@ namespace Mini_Compiler
             {
                 throw new SyntaxException("Se esperaba EOF");
             }
+            //int a; a= 1+2*2; print a+1;read b;
             return eValue;
         }
 

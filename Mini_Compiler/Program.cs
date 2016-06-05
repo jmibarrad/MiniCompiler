@@ -11,11 +11,14 @@ namespace Mini_Compiler
     {
         static void Main(string[] args)
         {
-            SampleParser parser = new SampleParser(new Lexer.Lexer(new StringContent("int a;string b; a= 1+2*b; print a+1;read a;")));
+            string code = @"
+int a[2][3];
+a=a[4];";
+            SampleParser parser = new SampleParser(new Lexer.Lexer(new StringContent(code)));
             var tree = parser.Parse();
             tree.ValidateSemantic();
+            Console.WriteLine("No errors found.");
             Console.ReadKey();
-            Console.WriteLine("");
         }
     }
 }

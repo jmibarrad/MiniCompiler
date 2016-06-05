@@ -32,6 +32,7 @@ namespace Mini_Compiler
     {
         public string Value;
         public TokenTypes Type;
+        public List<int> Dimensions;
         protected override void ValidateNodeSemantic()
         {
             string typeName = Type == TokenTypes.Int ? "int" : "string";
@@ -59,11 +60,11 @@ namespace Mini_Compiler
 
     public class AssignNode : SentenceNode
     {
-        public string Id;
+        public IdNode Id;
         public ExpressionNode Expression;
         protected override void ValidateNodeSemantic()
         {
-            var idType = SymbolTable.Instance.GetVariable(Id);
+            var idType = SymbolTable.Instance.GetVariable(Id.Value);
             var exprType = Expression.ValidateSemantic();
             if(! idType.IsAssignable(exprType))
                 throw new SemanticException("asig");
@@ -99,6 +100,7 @@ namespace Mini_Compiler
     public class IdNode : ExpressionNode
     {
         public string Value;
+        public List<Accesor> AccesorsList;
         public override BaseType ValidateSemantic()
         {
             return SymbolTable.Instance.GetVariable(Value);

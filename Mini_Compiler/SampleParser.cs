@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Security.AccessControl;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
@@ -45,10 +46,12 @@ namespace Mini_Compiler
 
                     currentToken = lexer.GetNextToken();
 
+                    var dimensions = Dimensions();
+
                     if (currentToken.Type == TokenTypes.Eos)
                     {
                         currentToken = lexer.GetNextToken();
-                        return new DeclarationNode {Type = type, Value = name};
+                        return new DeclarationNode {Type = type, Value = name, Dimensions = dimensions};
                     }
                 }
             }else if (currentToken.Type == TokenTypes.Read)
@@ -87,8 +90,7 @@ namespace Mini_Compiler
             }
             else if (currentToken.Type == TokenTypes.Id)
             {
-                string name = currentToken.Lexeme;
-                currentToken = lexer.GetNextToken();
+                var idNode = Id();
                 if (currentToken.Type == TokenTypes.Equal)
                 {
                     currentToken = lexer.GetNextToken();
@@ -97,12 +99,35 @@ namespace Mini_Compiler
                     if (currentToken.Type == TokenTypes.Eos)
                     {
                         currentToken = lexer.GetNextToken();
-                        return new AssignNode {Id = name, Expression = exp};
+                        return new AssignNode {Id = idNode, Expression = exp};
                     }
                 }
 
             }
             throw new SyntaxErrorException();
+        }
+
+        private List<int> Dimensions()
+        {
+            if (currentToken.Type == TokenTypes.LeftBracket)
+            {
+                currentToken = lexer.GetNextToken();
+                if (currentToken.Type == TokenTypes.Number)
+                {
+                    int number = int.Parse(currentToken.Lexeme);
+                    currentToken = lexer.GetNextToken();
+                    if (currentToken.Type == TokenTypes.RightBracket)
+                    {
+                        currentToken = lexer.GetNextToken();
+                        var dimensions = Dimensions();
+                        dimensions.Insert(0, number);
+                        return dimensions;
+                    }
+                    throw new SyntaxErrorException("No se cerro bracket");
+                }
+                throw new SyntaxErrorException("No se cerro bracket");
+            }
+            return new List<int>();
         }
 
         public SentenceNode Parse()
@@ -186,13 +211,7 @@ namespace Mini_Compiler
                 return new NumberNode {Value = value};
             }else if (currentToken.Type == TokenTypes.Id)
             {
-                string id = currentToken.Lexeme;
-                currentToken = lexer.GetNextToken();
-                return new IdNode
-                {
-                    Value = id
-                        
-                };
+                return Id();
             }else if (currentToken.Type == TokenTypes.LeftParent)
             {
                 currentToken = lexer.GetNextToken();
@@ -210,6 +229,59 @@ namespace Mini_Compiler
                 throw new SyntaxErrorException("F");
             }
         }
+
+        private IdNode Id()
+        {
+            string id = currentToken.Lexeme;
+            currentToken = lexer.GetNextToken();
+            var accesorList = AccesorList();
+            return new IdNode
+            {
+                Value = id,
+                AccesorsList = accesorList
+            };
+        }
+
+        private List<Accesor> AccesorList()
+        {
+            if (currentToken.Type == TokenTypes.LeftBracket)
+            {
+                var accessor = Accessor();
+                var accessorList = AccesorList();
+                accessorList.Insert(0, accessor);
+                return accessorList;
+            }
+            else
+            {
+                return new List<Accesor>();
+            }
+        }
+
+        private Accesor Accessor()
+        {
+            currentToken = lexer.GetNextToken();
+            var expression = E();
+            if (currentToken.Type != TokenTypes.RightBracket)
+            {
+                throw new SyntaxErrorException("No se cerro bracket");
+            }
+            currentToken = lexer.GetNextToken();
+            return new IndexAccesor(expression);
+        }
+    }
+
+    internal class IndexAccesor : Accesor
+    {
+        public ExpressionNode Expression { get; set; }
+
+        public IndexAccesor(ExpressionNode expression)
+        {
+            Expression = expression;
+        }
+    }
+
+    public abstract class Accesor
+    {
     }
 
     internal class SyntaxException : Exception

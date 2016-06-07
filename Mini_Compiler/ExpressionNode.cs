@@ -36,7 +36,7 @@ namespace Mini_Compiler
         protected override void ValidateNodeSemantic()
         {
             string typeName = Type == TokenTypes.Int ? "int" : "string";
-            SymbolTable.Instance.DeclareVariable(Value,typeName);
+            SymbolTable.Instance.DeclareVariable(Value,typeName, Dimensions);
         }
     }
 
@@ -64,7 +64,7 @@ namespace Mini_Compiler
         public ExpressionNode Expression;
         protected override void ValidateNodeSemantic()
         {
-            var idType = SymbolTable.Instance.GetVariable(Id.Value);
+            var idType = Id.ValidateSemantic();
             var exprType = Expression.ValidateSemantic();
             if(! idType.IsAssignable(exprType))
                 throw new SemanticException("asig");
@@ -103,7 +103,33 @@ namespace Mini_Compiler
         public List<Accesor> AccesorsList;
         public override BaseType ValidateSemantic()
         {
-            return SymbolTable.Instance.GetVariable(Value);
+            var varType = SymbolTable.Instance.GetVariable(Value);
+            foreach (var accesor in AccesorsList)
+            {
+                if (accesor is IndexAccesor)
+                {
+                    var currentAccesor = (IndexAccesor) accesor;
+                    if (currentAccesor.Expression.ValidateSemantic() is IntType)
+                    {
+                        if (varType is ArrayType)
+                        {
+                            var tempArray = (ArrayType) varType;
+                            varType = tempArray.Type;
+
+
+                        }
+                        else
+                        {
+                            throw new SemanticException("variable cant be access, not an array");
+                        }
+                    }
+                    else
+                    {
+                        throw new SemanticException("Index of array is not Int ");
+                    }
+                }
+            }
+            return varType;
         }
     }
 

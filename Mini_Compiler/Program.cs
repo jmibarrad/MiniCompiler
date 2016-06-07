@@ -12,12 +12,22 @@ namespace Mini_Compiler
         static void Main(string[] args)
         {
             string code = @"
-int a[2][3];
-a=a[4];";
+                        int a[2][3];
+                        a[0][a[0]]=a[2][3];";
             SampleParser parser = new SampleParser(new Lexer.Lexer(new StringContent(code)));
-            var tree = parser.Parse();
-            tree.ValidateSemantic();
-            Console.WriteLine("No errors found.");
+            try
+            {
+                var tree = parser.Parse();
+                tree.ValidateSemantic();
+                Console.WriteLine("No errors found.");
+            }
+            catch (Exception e)
+            {
+                
+                Console.WriteLine(e.Message);
+
+            }
+            
             Console.ReadKey();
         }
     }

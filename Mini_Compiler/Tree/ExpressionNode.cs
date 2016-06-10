@@ -1,18 +1,15 @@
-﻿using Mini_Compiler.Lexer;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using Mini_Compiler.Lexer;
 using Mini_Compiler.Semantic;
 using Mini_Compiler.Semantic.Types;
 
-namespace Mini_Compiler
+namespace Mini_Compiler.Tree
 {
     public abstract class ExpressionNode
     {
         public abstract BaseType ValidateSemantic();
+        public abstract string GenerateCode();
+
     }
 
     public abstract class SentenceNode
@@ -24,7 +21,17 @@ namespace Mini_Compiler
                 NextSentence.ValidateSemantic();
         }
 
+        public string TreeGenerateCode()
+        {
+            var fragment = GenerateCode();
+            if (NextSentence != null)
+                fragment += "\n" +NextSentence.TreeGenerateCode();
+            return fragment;
+        }
+
         protected abstract void ValidateNodeSemantic();
+        protected abstract string GenerateCode();
+
         public SentenceNode NextSentence;
     }
 
@@ -38,6 +45,13 @@ namespace Mini_Compiler
             string typeName = Type == TokenTypes.Int ? "int" : "string";
             SymbolTable.Instance.DeclareVariable(Value,typeName, Dimensions);
         }
+
+        protected override string GenerateCode()
+        {
+            string typeName = Type == TokenTypes.Int ? "int" : "String";
+            return $"{typeName} {Value};";
+
+        }
     }
 
     public class ReadNode : SentenceNode
@@ -47,6 +61,13 @@ namespace Mini_Compiler
         {
              SymbolTable.Instance.GetVariable(Id);
         }
+
+        protected override string GenerateCode()
+        {
+            var varType = SymbolTable.Instance.GetVariable(Id);
+            var typeValue = varType is IntType ? "Int" : "";
+            return $"{Id} = lea.next{typeValue}();";
+        }
     }
 
     public class PrintNode : SentenceNode
@@ -55,6 +76,11 @@ namespace Mini_Compiler
         protected override void ValidateNodeSemantic()
         {
             Expression.ValidateSemantic();
+        }
+
+        protected override string GenerateCode()
+        {
+            return $"System.out.println({Expression.GenerateCode()});";
         }
     }
 
@@ -69,6 +95,11 @@ namespace Mini_Compiler
             if(! idType.IsAssignable(exprType))
                 throw new SemanticException("asig");
         }
+
+        protected override string GenerateCode()
+        {
+            return $"{Id.GenerateCode()} = {Expression.GenerateCode()};";
+        }
     }
 
     public class MultNode : BinaryOperatorNode
@@ -81,6 +112,12 @@ namespace Mini_Compiler
                 return leftType;
             throw new SemanticException($"mul is not supported for {leftType} and {rightType}");
         }
+
+        public override string GenerateCode()
+        {
+            return $"({LeftOperand.GenerateCode()} * {RightOperand.GenerateCode()})";
+
+        }
     }
 
     public class DivNode : BinaryOperatorNode
@@ -92,6 +129,11 @@ namespace Mini_Compiler
             if (leftType is IntType && rightType is IntType)
                 return leftType;
             throw new SemanticException($"div is not supported for {leftType} and {rightType}");
+        }
+
+        public override string GenerateCode()
+        {
+            return $"({LeftOperand.GenerateCode()} / {RightOperand.GenerateCode()})";
         }
     }
 
@@ -131,6 +173,11 @@ namespace Mini_Compiler
             }
             return varType;
         }
+
+        public override string GenerateCode()
+        {
+            return Value;
+        }
     }
 
     public class NumberNode : ExpressionNode
@@ -139,6 +186,12 @@ namespace Mini_Compiler
         public override BaseType ValidateSemantic()
         {
             return TypesTable.Instance.GetType("int");
+        }
+
+        public override string GenerateCode()
+        {
+
+            return Value.ToString();
         }
     }
 

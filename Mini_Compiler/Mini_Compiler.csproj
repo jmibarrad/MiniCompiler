@@ -47,9 +47,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AddNode.cs" />
-    <Compile Include="BinaryOperatorNode.cs" />
-    <Compile Include="ExpressionNode.cs" />
+    <Compile Include="Generator\GenerateMain.cs" />
+    <Compile Include="Tree\AddNode.cs" />
+    <Compile Include="Tree\BinaryOperatorNode.cs" />
+    <Compile Include="Tree\ExpressionNode.cs" />
     <Compile Include="Lexer\Lexer.cs" />
     <Compile Include="Lexer\LexicalException.cs" />
     <Compile Include="Lexer\StringContent.cs" />
@@ -57,21 +58,19 @@
     <Compile Include="Lexer\Token.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SampleParser.cs" />
+    <Compile Include="Semantic\SampleParser.cs" />
     <Compile Include="Semantic\SymbolTable.cs" />
     <Compile Include="Semantic\TypesTable.cs" />
     <Compile Include="Semantic\Types\BaseType.cs" />
     <Compile Include="Semantic\Types\IntType.cs" />
     <Compile Include="Semantic\Types\StringType.cs" />
-    <Compile Include="SubNode.cs" />
+    <Compile Include="Tree\SubNode.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Tree\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

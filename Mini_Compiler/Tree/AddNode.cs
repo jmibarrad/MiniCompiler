@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Mini_Compiler.Semantic;
+﻿using Mini_Compiler.Semantic;
 using Mini_Compiler.Semantic.Types;
 
-namespace Mini_Compiler
+namespace Mini_Compiler.Tree
 {
     public class AddNode: BinaryOperatorNode
     {
@@ -19,6 +14,11 @@ namespace Mini_Compiler
             if (leftType is StringType && rightType is StringType)
                 return leftType;
             throw new SemanticException($"add is not supported for {leftType} and {rightType}");
+        }
+
+        public override string GenerateCode()
+        {
+            return $"({LeftOperand.GenerateCode()} + {RightOperand.GenerateCode()})";
         }
     }
 }

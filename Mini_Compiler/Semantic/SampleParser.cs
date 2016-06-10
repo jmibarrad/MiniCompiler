@@ -1,16 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Security.AccessControl;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Threading.Tasks;
 using Mini_Compiler.Lexer;
-using TechTalk.SpecFlow.Assist.ValueComparers;
+using Mini_Compiler.Tree;
 
-namespace Mini_Compiler
+namespace Mini_Compiler.Semantic
 {
     class SampleParser
     {

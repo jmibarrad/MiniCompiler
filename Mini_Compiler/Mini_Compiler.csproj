@@ -64,6 +64,7 @@
     <Compile Include="Semantic\Types\BaseType.cs" />
     <Compile Include="Semantic\Types\IntType.cs" />
     <Compile Include="Semantic\Types\StringType.cs" />
+    <Compile Include="Tree\MultNode.cs" />
     <Compile Include="Tree\SubNode.cs" />
   </ItemGroup>
   <ItemGroup>

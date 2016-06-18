@@ -118,7 +118,7 @@ namespace Mini_Compiler.Lexer
                         {
                             lexeme += currentSymbol.CurrentSymbol;
                             currentSymbol = Content.nextSymbol();
-                            return new Token { Type = TokenTypes.Number, Lexeme = lexeme, Column = tokenColumn, Row = tokenRow };
+                            return new Token { Type = TokenTypes.String, Lexeme = lexeme, Column = tokenColumn, Row = tokenRow };
                         }
                         
 

@@ -12,6 +12,15 @@ namespace Mini_Compiler.Generator
         {
             var sourceCode = @"import java.util.*;
                                 public class MyClass {
+                                
+                                public static String MultiplyString(int count, String str){
+                                    String temp = """";
+                                    for(int i = 0; i < count; i++) {
+                                        temp += str;
+                                    }
+                                    return temp;
+                                }
+            
                                 public static void main(String args[]) {
                                     Scanner lea = new Scanner(System.in);
                                     " + code + @"
@@ -22,5 +31,6 @@ namespace Mini_Compiler.Generator
 
             return sourceCode;
         }
+
     }
 }

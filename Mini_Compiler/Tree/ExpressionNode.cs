@@ -102,24 +102,6 @@ namespace Mini_Compiler.Tree
         }
     }
 
-    public class MultNode : BinaryOperatorNode
-    {
-        public override BaseType ValidateSemantic()
-        {
-            var leftType = LeftOperand.ValidateSemantic();
-            var rightType = RightOperand.ValidateSemantic();
-            if (leftType is IntType && rightType is IntType)
-                return leftType;
-            throw new SemanticException($"mul is not supported for {leftType} and {rightType}");
-        }
-
-        public override string GenerateCode()
-        {
-            return $"({LeftOperand.GenerateCode()} * {RightOperand.GenerateCode()})";
-
-        }
-    }
-
     public class DivNode : BinaryOperatorNode
     {
         public override BaseType ValidateSemantic()

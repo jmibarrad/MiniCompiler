@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using Mini_Compiler.Lexer;
+using Mini_Compiler.Semantic.Types;
 using Mini_Compiler.Tree;
 
 namespace Mini_Compiler.Semantic
@@ -203,7 +204,16 @@ namespace Mini_Compiler.Semantic
                 var value = float.Parse(currentToken.Lexeme);
                 currentToken = lexer.GetNextToken();
                 return new NumberNode {Value = value};
-            }else if (currentToken.Type == TokenTypes.Id)
+            }
+            else if (currentToken.Type == TokenTypes.String)
+            {
+                var value = currentToken.Lexeme;
+                currentToken = lexer.GetNextToken();
+                return new StringNode {Value = value};
+
+
+            }
+            else if (currentToken.Type == TokenTypes.Id)
             {
                 return Id();
             }else if (currentToken.Type == TokenTypes.LeftParent)
@@ -261,6 +271,20 @@ namespace Mini_Compiler.Semantic
             }
             currentToken = lexer.GetNextToken();
             return new IndexAccesor(expression);
+        }
+    }
+
+    internal class StringNode : ExpressionNode
+    {
+        public string Value { get; set; }
+        public override BaseType ValidateSemantic()
+        {
+            return TypesTable.Instance.GetType("string");
+        }
+
+        public override string GenerateCode()
+        {
+            return Value;
         }
     }
 

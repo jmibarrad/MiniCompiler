@@ -48,6 +48,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Generator\GenerateMain.cs" />
+    <Compile Include="Semantic\IndexAccesor.cs" />
+    <Compile Include="Semantic\structAccesor.cs" />
+    <Compile Include="Semantic\Types\StructType.cs" />
     <Compile Include="Tree\AddNode.cs" />
     <Compile Include="Tree\BinaryOperatorNode.cs" />
     <Compile Include="Tree\ExpressionNode.cs" />
@@ -65,6 +68,8 @@
     <Compile Include="Semantic\Types\IntType.cs" />
     <Compile Include="Semantic\Types\StringType.cs" />
     <Compile Include="Tree\MultNode.cs" />
+    <Compile Include="Tree\StructDeclarationNode.cs" />
+    <Compile Include="Tree\StructNode.cs" />
     <Compile Include="Tree\SubNode.cs" />
   </ItemGroup>
   <ItemGroup>

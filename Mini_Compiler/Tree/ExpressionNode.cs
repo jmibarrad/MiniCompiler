@@ -24,15 +24,23 @@ namespace Mini_Compiler.Tree
         public string TreeGenerateCode()
         {
             var fragment = GenerateCode();
-            if (NextSentence != null)
-                fragment += "\n" +NextSentence.TreeGenerateCode();
+            if (NextSentence != null && !(NextSentence is StructDeclarationNode))
+            {
+                var code = NextSentence.TreeGenerateCode();
+                fragment += "\n" + code;
+            }
+            else if(NextSentence is StructDeclarationNode)
+            {
+                fragment +=NextSentence.TreeGenerateCode();
+            }
             return fragment;
         }
 
-        protected abstract void ValidateNodeSemantic();
-        protected abstract string GenerateCode();
+        public abstract void ValidateNodeSemantic();
+        public abstract string GenerateCode();
 
         public SentenceNode NextSentence;
+
     }
 
     public class DeclarationNode : SentenceNode
@@ -40,29 +48,39 @@ namespace Mini_Compiler.Tree
         public string Value;
         public TokenTypes Type;
         public List<int> Dimensions;
-        protected override void ValidateNodeSemantic()
+        public Dictionary<string, TokenTypes> TypeDictionary = new Dictionary<string, TokenTypes>
+        {
+            { "int", TokenTypes.Int},
+            { "string", TokenTypes.String},
+        };
+        public override void ValidateNodeSemantic()
         {
             string typeName = Type == TokenTypes.Int ? "int" : "string";
             SymbolTable.Instance.DeclareVariable(Value,typeName, Dimensions);
         }
 
-        protected override string GenerateCode()
+        public override string GenerateCode()
         {
             string typeName = Type == TokenTypes.Int ? "int" : "String";
             return $"{typeName} {Value};";
 
+        }
+
+        public virtual BaseType GetBaseType()
+        {
+            return TypesTable.Instance.GetType(Type.ToString().ToLower());
         }
     }
 
     public class ReadNode : SentenceNode
     {
         public string Id;
-        protected override void ValidateNodeSemantic()
+        public override void ValidateNodeSemantic()
         {
              SymbolTable.Instance.GetVariable(Id);
         }
 
-        protected override string GenerateCode()
+        public override string GenerateCode()
         {
             var varType = SymbolTable.Instance.GetVariable(Id);
             var typeValue = varType is IntType ? "Int" : "";
@@ -73,12 +91,12 @@ namespace Mini_Compiler.Tree
     public class PrintNode : SentenceNode
     {
         public ExpressionNode Expression;
-        protected override void ValidateNodeSemantic()
+        public override void ValidateNodeSemantic()
         {
             Expression.ValidateSemantic();
         }
 
-        protected override string GenerateCode()
+        public override string GenerateCode()
         {
             return $"System.out.println({Expression.GenerateCode()});";
         }
@@ -88,7 +106,7 @@ namespace Mini_Compiler.Tree
     {
         public IdNode Id;
         public ExpressionNode Expression;
-        protected override void ValidateNodeSemantic()
+        public override void ValidateNodeSemantic()
         {
             var idType = Id.ValidateSemantic();
             var exprType = Expression.ValidateSemantic();
@@ -96,9 +114,27 @@ namespace Mini_Compiler.Tree
                 throw new SemanticException("asig");
         }
 
-        protected override string GenerateCode()
+        public override string GenerateCode()
         {
             return $"{Id.GenerateCode()} = {Expression.GenerateCode()};";
+        }
+    }
+
+    public class OnlyDeclareNode : SentenceNode
+    {
+        public IdNode Id;
+        public ExpressionNode Expression;
+        public override void ValidateNodeSemantic()
+        {
+            var idType = Id.ValidateSemantic();
+            var exprType = Expression.ValidateSemantic();
+            if (!idType.IsAssignable(exprType))
+                throw new SemanticException("asig");
+        }
+
+        public override string GenerateCode()
+        {
+            return $"{Id.GenerateCode()} {Expression.GenerateCode()} = new {Id.GenerateCode()}();";
         }
     }
 

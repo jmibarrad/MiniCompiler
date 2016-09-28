@@ -57,7 +57,8 @@ namespace Mini_Compiler.Lexer
                             currentSymbol = Content.nextSymbol();
                         }
                         else if (currentSymbol.CurrentSymbol == '+' || currentSymbol.CurrentSymbol == '*' || currentSymbol.CurrentSymbol == '-' || currentSymbol.CurrentSymbol == '='
-                           || currentSymbol.CurrentSymbol == ';' || currentSymbol.CurrentSymbol == '(' || currentSymbol.CurrentSymbol == ')' || currentSymbol.CurrentSymbol == '/' || currentSymbol.CurrentSymbol == '[' || currentSymbol.CurrentSymbol == ']')
+                           || currentSymbol.CurrentSymbol == ';' || currentSymbol.CurrentSymbol == '(' || currentSymbol.CurrentSymbol == ')' || currentSymbol.CurrentSymbol == '/' || currentSymbol.CurrentSymbol == '[' || currentSymbol.CurrentSymbol == ']'
+                           || currentSymbol.CurrentSymbol == '{' || currentSymbol.CurrentSymbol == '}' || currentSymbol.CurrentSymbol == '.')
                         {
                             lexeme += currentSymbol.CurrentSymbol;
                             currentSymbol = Content.nextSymbol();
@@ -93,6 +94,8 @@ namespace Mini_Compiler.Lexer
                                 return new Token() { Type = TokenTypes.Print, Lexeme = lexeme, Column = tokenColumn, Row = tokenRow };
                             else if (lexeme.Equals("read"))
                                 return new Token() { Type = TokenTypes.Read, Lexeme = lexeme, Column = tokenColumn, Row = tokenRow };
+                            else if (lexeme.Equals("struct"))
+                                return new Token() { Type = TokenTypes.Struct, Lexeme = lexeme, Column = tokenColumn, Row = tokenRow };
                             return new Token { Type = TokenTypes.Id, Lexeme = lexeme, Column = tokenColumn, Row = tokenRow };
                         }
                         break;
@@ -144,6 +147,12 @@ namespace Mini_Compiler.Lexer
                             return new Token() { Type = TokenTypes.LeftBracket, Lexeme = lexeme, Column = tokenColumn, Row = tokenRow };
                         else if (lexeme.Equals("]"))
                             return new Token() { Type = TokenTypes.RightBracket, Lexeme = lexeme, Column = tokenColumn, Row = tokenRow };
+                        else if (lexeme.Equals("{"))
+                            return new Token() { Type = TokenTypes.LeftKey, Lexeme = lexeme, Column = tokenColumn, Row = tokenRow };
+                        else if (lexeme.Equals("}"))
+                            return new Token() { Type = TokenTypes.RightKey, Lexeme = lexeme, Column = tokenColumn, Row = tokenRow };
+                        else if (lexeme.Equals("."))
+                            return new Token() { Type = TokenTypes.Access, Lexeme = lexeme, Column = tokenColumn, Row = tokenRow };
                         break;
                     case 6:
                         return new Token { Type = TokenTypes.EOF, Lexeme = lexeme, Column = tokenColumn, Row = tokenRow };

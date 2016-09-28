@@ -14,25 +14,26 @@ namespace Mini_Compiler
         static void Main(string[] args)
         {
             string code = @"
-                        int a;
-                        a = 12;
-                        int b;
-                        print ""Ingrese un numero :*"";
-                        read b;
-                        string val;
-                        print ""Examen mañana :* JAVI te extraño"";
-                        read val;
-                        print a + b;
-                        print val+a;
-                        print a+val;
-                        print ""hola""*3;
+                        struct Persona {
+                            string name;
+                        }
+
+                        struct fecha {
+                            int a;
+                            string b;
+                            Persona per;
+                            int c;
+                        }
+                        
+                        fecha fch;
                         ";
             SampleParser parser = new SampleParser(new Lexer.Lexer(new StringContent(code)));
             try
             {
                 var tree = parser.Parse();
                 tree.ValidateSemantic();
-                var javaCode = GenerateMain.InitJavaCode(tree.TreeGenerateCode());
+                var maincode = tree.TreeGenerateCode();
+                var javaCode = GenerateMain.InitJavaCode(maincode);
                 Console.Write(javaCode);
                 Console.WriteLine("No errors found.");
             }

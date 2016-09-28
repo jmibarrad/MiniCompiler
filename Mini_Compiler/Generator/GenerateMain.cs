@@ -8,9 +8,11 @@ namespace Mini_Compiler.Generator
 {
     public static class GenerateMain
     {
+        public static string ClassDefinitionCode = "";
         public static string InitJavaCode(string code)
         {
             var sourceCode = @"import java.util.*;
+                                "+ClassDefinitionCode+@"
                                 public class MyClass {
                                 
                                 public static String MultiplyString(int count, String str){

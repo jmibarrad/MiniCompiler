@@ -84,7 +84,7 @@ this.ScenarioSetup(scenarioInfo);
  testRunner.When("We Tokenize", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
             TechTalk.SpecFlow.Table table1 = new TechTalk.SpecFlow.Table(new string[] {
-                        "Type",
+                        "StructType",
                         "Lexeme",
                         "Column",
                         "Row"});
@@ -113,7 +113,7 @@ this.ScenarioSetup(scenarioInfo);
  testRunner.When("We Tokenize", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
             TechTalk.SpecFlow.Table table2 = new TechTalk.SpecFlow.Table(new string[] {
-                        "Type",
+                        "StructType",
                         "Lexeme",
                         "Column",
                         "Row"});
@@ -147,7 +147,7 @@ this.ScenarioSetup(scenarioInfo);
  testRunner.When("We Tokenize", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
             TechTalk.SpecFlow.Table table3 = new TechTalk.SpecFlow.Table(new string[] {
-                        "Type",
+                        "StructType",
                         "Lexeme",
                         "Column",
                         "Row"});
@@ -186,7 +186,7 @@ this.ScenarioSetup(scenarioInfo);
  testRunner.When("We Tokenize", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
             TechTalk.SpecFlow.Table table4 = new TechTalk.SpecFlow.Table(new string[] {
-                        "Type",
+                        "StructType",
                         "Lexeme",
                         "Column",
                         "Row"});
@@ -220,7 +220,7 @@ this.ScenarioSetup(scenarioInfo);
  testRunner.When("We Tokenize", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
             TechTalk.SpecFlow.Table table5 = new TechTalk.SpecFlow.Table(new string[] {
-                        "Type",
+                        "StructType",
                         "Lexeme",
                         "Column",
                         "Row"});
@@ -259,7 +259,7 @@ this.ScenarioSetup(scenarioInfo);
  testRunner.When("We Tokenize", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
             TechTalk.SpecFlow.Table table6 = new TechTalk.SpecFlow.Table(new string[] {
-                        "Type",
+                        "StructType",
                         "Lexeme",
                         "Column",
                         "Row"});
@@ -293,7 +293,7 @@ this.ScenarioSetup(scenarioInfo);
  testRunner.When("We Tokenize", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
             TechTalk.SpecFlow.Table table7 = new TechTalk.SpecFlow.Table(new string[] {
-                        "Type",
+                        "StructType",
                         "Lexeme",
                         "Column",
                         "Row"});

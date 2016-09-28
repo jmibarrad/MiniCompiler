@@ -41,7 +41,7 @@ namespace MiniCompiler.Tests.Steps
         {
             for (int i =0; i < table.RowCount; i++)
             {
-                Assert.AreEqual(table.Rows[i]["Type"] , tokenList[i].Type.ToString(), "The TokenTypes do not match.");
+                Assert.AreEqual(table.Rows[i]["StructType"] , tokenList[i].Type.ToString(), "The TokenTypes do not match.");
                 Assert.AreEqual(table.Rows[i]["Lexeme"], tokenList[i].Lexeme.ToString(), "The TokenTypes do not match.");
                 Assert.AreEqual(table.Rows[i]["Row"], tokenList[i].Row.ToString(), "The TokenTypes do not match.");
                 Assert.AreEqual(table.Rows[i]["Column"], tokenList[i].Column.ToString(), "The TokenTypes do not match.");

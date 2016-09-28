@@ -85,6 +85,7 @@ namespace Mini_Compiler.Semantic
             }
             else if (currentToken.Type == TokenTypes.Id)
             {
+
                 var idNode = Id();
                 if (currentToken.Type == TokenTypes.Equal)
                 {
@@ -97,9 +98,87 @@ namespace Mini_Compiler.Semantic
                         return new AssignNode {Id = idNode, Expression = exp};
                     }
                 }
+                else if(currentToken.Type == TokenTypes.Id)
+                {
+                    var name = currentToken.Lexeme;
+                    currentToken = lexer.GetNextToken();
+                    if (currentToken.Type == TokenTypes.Eos)
+                    {
+                        currentToken = lexer.GetNextToken();
+                        return new StructNode { Value = name, StructType = idNode.Value };
+                    }
+                }
 
             }
+            else if (currentToken.Type == TokenTypes.Struct)
+            {
+                currentToken = lexer.GetNextToken();
+                return DeclareStruct();
+            }
             throw new SyntaxErrorException();
+        }
+
+        private StructDeclarationNode DeclareStruct()
+        {
+            var structname = currentToken.Lexeme;
+            currentToken = lexer.GetNextToken();
+            if (currentToken.Type == TokenTypes.LeftKey)
+            {
+                var declarationList = new List<DeclarationNode>();
+                currentToken = lexer.GetNextToken();
+                StructDeclarations(declarationList);
+                if (currentToken.Type == TokenTypes.RightKey)
+                {
+                    currentToken = lexer.GetNextToken();
+                    return new StructDeclarationNode {StructName = structname, DeclarationList = declarationList};    
+                }
+            }
+            throw new SyntaxErrorException();
+        }
+
+        private void StructDeclarations(List<DeclarationNode> list)
+        {
+            if (currentToken.Type == TokenTypes.Int || currentToken.Type == TokenTypes.String)
+            {
+                var type = currentToken.Type;
+                currentToken = lexer.GetNextToken();
+
+                if (currentToken.Type == TokenTypes.Id)
+                {
+                    string name = currentToken.Lexeme;
+
+                    currentToken = lexer.GetNextToken();
+
+                    if (currentToken.Type == TokenTypes.Eos)
+                    {
+                        currentToken = lexer.GetNextToken();
+                        var node = new DeclarationNode { Type = type, Value = name, Dimensions = new List<int>() };
+                        list.Add(node);
+                    }
+                }
+            }
+            else if (currentToken.Type == TokenTypes.Id)
+            {
+                var type = currentToken.Lexeme;
+                currentToken = lexer.GetNextToken();
+
+                if (currentToken.Type == TokenTypes.Id)
+                {
+                    var name = currentToken.Lexeme;
+                    currentToken = lexer.GetNextToken();
+
+                    if (currentToken.Type == TokenTypes.Eos)
+                    {
+                        currentToken = lexer.GetNextToken();
+                        list.Add(new StructNode { Value = name, StructType = type });
+                    }
+                }
+            }
+
+            if (currentToken.Type != TokenTypes.RightKey)
+            {
+                StructDeclarations(list);
+            }
         }
 
         private List<int> Dimensions()
@@ -238,7 +317,8 @@ namespace Mini_Compiler.Semantic
         {
             string id = currentToken.Lexeme;
             currentToken = lexer.GetNextToken();
-            var accesorList = AccesorList();
+            var accesorList = new List<Accesor>();
+                AccesorList(accesorList);
             return new IdNode
             {
                 Value = id,
@@ -246,19 +326,25 @@ namespace Mini_Compiler.Semantic
             };
         }
 
-        private List<Accesor> AccesorList()
+        private List<Accesor> AccesorList(List<Accesor> accessorList)
         {
             if (currentToken.Type == TokenTypes.LeftBracket)
             {
                 var accessor = Accessor();
-                var accessorList = AccesorList();
+                AccesorList(accessorList);
                 accessorList.Insert(0, accessor);
-                return accessorList;
             }
-            else
+            else if(currentToken.Type == TokenTypes.Access)
             {
-                return new List<Accesor>();
+                currentToken = lexer.GetNextToken();
+                if (currentToken.Type == TokenTypes.Id)
+                {
+                    var node = new StructAccesor {IdNode = currentToken.Lexeme};
+                    currentToken = lexer.GetNextToken();
+                    accessorList.Add(node);
+                }
             }
+            return accessorList;
         }
 
         private Accesor Accessor()
@@ -288,18 +374,9 @@ namespace Mini_Compiler.Semantic
         }
     }
 
-    internal class IndexAccesor : Accesor
-    {
-        public ExpressionNode Expression { get; set; }
-
-        public IndexAccesor(ExpressionNode expression)
-        {
-            Expression = expression;
-        }
-    }
-
     public abstract class Accesor
     {
+        public abstract BaseType Validate(BaseType type);
     }
 
     internal class SyntaxException : Exception

@@ -18,7 +18,11 @@
         Read,
         Print,
         Int,
-        String
+        String,
+        Struct,
+        LeftKey,
+        RightKey,
+        Access
     }
 
     public class Token
